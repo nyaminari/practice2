@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sj 1</title>
+</head>
+<body>
+    <canvas id="canvas" width="1000" height="1000"></canvas>
+
+    <script type="importmap">
+        {
+            "imports": {
+              "three": "https://unpkg.com/three@0.141.0/build/three.module.js",
+              "GLTFLoader" : "https://unpkg.com/three@0.141.0/examples/jsm/loaders/GLTFLoader.js"
+            }
+          }
+        
+    </script>
+
+    <script type="module">
+        import {GLTFLoader} from 'GLTFLoader';
+        import * as THREE from 'three';
+        //import { OrbitControls } from 'OrbitControls.js'
+
+        const scene = new THREE.Scene();
+        const renderer = new THREE.WebGLRenderer({
+            canvas : document.querySelector('#canvas'),
+            antialias : true
+        });
+
+        renderer.outputEncodeing = THREE.sTGBEncoding;
+
+        const camera = new THREE.PerspectiveCamera(30, 1);
+        camera.position.set(0,0,5);
+        //controls.update();
+
+        scene.background = new THREE.Color('black');
+
+        //조명
+        const light = new THREE.DirectionalLight(0xffffff, 1.5);
+        light.position.set(-1,1,1);
+        scene.add(light);
+        
+
+        const loader = new GLTFLoader();
+        loader.load('assamble.glb', function(gltf){
+            scene.add(gltf.scene);
+            renderer.render(scene, camera);
+
+            //반응형 처리
+            //function
+            function animate(){
+                requestAnimationFrame(animate)
+                gltf.scene.rotation.y -= 0.01;
+                renderer.render(scene, camera);
+            }
+            animate()
+
+
+        });
+
+        renderer.render(scene);
+
+
+
+    </script>
+    
+</body>
+</html>
